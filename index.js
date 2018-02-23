@@ -20,14 +20,24 @@ const STORE = [
 
 function generateItemElement(item, itemIndex, template) {
   return `
-  <li>${item.name}</li>
+  <li class="js-item-index-element" data-item-index="${itemIndex}">
+      <span class="shopping-item js-shopping-item ${item.checked ? "shopping-item__checked" : ''}">${item.name}</span>
+      <div class="shopping-item-controls">
+        <button class="shopping-item-toggle js-item-toggle">
+            <span class="button-label">check</span>
+        </button>
+        <button class="shopping-item-delete js-item-delete">
+            <span class="button-label">delete</span>
+        </button>
+      </div>
+    </li>
   `;
 }
 
 function generateShoppingItemsString(shoppingList) {
   console.log ('Generating shopping list element');
   const items = shoppingList.map((item, index) => generateItemElement(item, index));
-  return items.join('');
+  return items.join();
 }
 
 function renderShoppingList() {
