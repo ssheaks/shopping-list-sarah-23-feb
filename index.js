@@ -18,6 +18,8 @@ items: [
   {name: 'milk', checked: true},
   {name: 'bread', checked: false}
 ],
+filter: false,
+search: null
 }
 function generateItemElement(item, itemIndex, template) {
   return `
