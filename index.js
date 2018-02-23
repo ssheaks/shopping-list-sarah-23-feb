@@ -67,11 +67,30 @@ function handleNewItemSubmit() {
   });
 }
 
+function toggleCheckedforListItem(itemIndex) {
+  console.log('Toggling checked property for item at index ' + itemIndex);
+  STORE[itemIndex].checked = !STORE[itemIndex].checked;
+}
+
+function getItemIndexFromElement(item) {
+  const itemIndexString = $(item)
+  .closest('.js-item-index-element')
+  .attr('data-item-index');
+  return parseInt(itemIndexString, 10);
+}
+
 
 function handleItemCheckClicked() {
   // this funciton will be reponsible for when users click the "check" button on
   // a shopping list item.
   console.log('`handleItemCheckClicked` ran');
+  $('.js-shopping-list').on('click', `.js-item-toggle`, event => {
+    console.log('`handleItemCheckClicked` ran')
+    const itemIndex = getItemIndexFromElement(event.currentTarget);
+    console.log(itemIndex);
+    toggleCheckedforListItem(itemIndex);
+    renderShoppingList();
+  });
 }
 
 
