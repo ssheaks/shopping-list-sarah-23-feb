@@ -11,13 +11,14 @@
 // we're pre-adding items to the shopping list so there's
 // something to see when the page first loads.
 
-const STORE = [
+const STORE = {
+items: [
   {name: 'apples', checked: false},
   {name: 'oranges', checked: false},
   {name: 'milk', checked: true},
   {name: 'bread', checked: false}
-];
-
+],
+}
 function generateItemElement(item, itemIndex, template) {
   return `
   <li class="js-item-index-element" data-item-index="${itemIndex}">
@@ -44,14 +45,14 @@ function renderShoppingList() {
   // this function will be repsonsible for rendering the shopping list in
   // the DOM
   console.log('`renderShoppingList` ran');
-  const shoppingListItemsString = generateShoppingItemsString(STORE);
+  const shoppingListItemsString = generateShoppingItemsString(STORE.items);
   //inserts HTML into DOM
   $('.js-shopping-list').html(shoppingListItemsString);
 }
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding ${itemName} to shopping list`);
-  STORE.push({name: itemName, checked: false});
+  STORE.items.push({name: itemName, checked: false});
 }
 
 
@@ -69,14 +70,14 @@ function handleNewItemSubmit() {
 
 function toggleCheckedforListItem(itemIndex) {
   console.log('Toggling checked property for item at index ' + itemIndex);
-  STORE[itemIndex].checked = !STORE[itemIndex].checked;
+  STORE.items[itemIndex].checked = !STORE.items[itemIndex].checked;
 }
 
 function getItemIndexFromElement(item) {
   const itemIndexString = $(item)
   .closest('.js-item-index-element')
-  .attr('data-item-index');
-  return parseInt(itemIndexString, 10);
+  .data('item-index');
+  return itemIndexString;
 }
 
 
@@ -93,11 +94,19 @@ function handleItemCheckClicked() {
   });
 }
 
+function deleteItem(index) {
+STORE.items.splice(index, 1);
+}
 
 function handleDeleteItemClicked() {
   // this function will be responsible for when users want to delete a shopping list
   // item
   console.log('`handleDeleteItemClicked` ran')
+  $('.js-shopping-list').on('click', '.js-item-delete', event => {
+    const itemIndex = getItemIndexFromElement(event.currentTarget);
+    deleteItem(itemIndex);
+    renderShoppingList();
+  })
 }
 
 // this function will be our callback when the page loads. it's responsible for
