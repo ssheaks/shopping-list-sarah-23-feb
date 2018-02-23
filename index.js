@@ -19,7 +19,7 @@ items: [
   {name: 'bread', checked: false}
 ],
 filter: false,
-search: null
+search: ''
 }
 function generateItemElement(item, itemIndex, template) {
   return `
@@ -48,8 +48,13 @@ function renderShoppingList() {
   // the DOM
   console.log('`renderShoppingList` ran');
   let items = STORE.items;
+  //render filter checked items
   if (STORE.filter) {
     items=STORE.items.filter(item => !item.checked);
+  }
+  //render search term
+  if (STORE.search) {
+    items = STORE.items.filter(item => item.name.includes(STORE.search));
   }
   const shoppingListItemsString = generateShoppingItemsString(items);
   //inserts HTML into DOM
@@ -132,6 +137,26 @@ function handleFilterCheck() {
   });
 }
 
+function setSearchTerm(term) {
+STORE.search = term;
+}
+
+// Listen for when a user enters a search.
+// Retrieve the item's name (val) attribute in STORE to set search term.
+// Filter STORE based on search.
+// Re-render the shopping list (update render function).
+//stretch goal = add button to clear search
+function handleShoppingListSearch() {
+  $('.js-shopping-list-search-entry').on('keyup', event => {
+    console.log('handle search ran');
+    let valSearchTerm = $(event.currentTarget).val();
+    console.log(valSearchTerm);
+    setSearchTerm(valSearchTerm);
+    renderShoppingList();
+  })
+
+}
+
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
 // that handle new item submission and user clicks on the "check" and "delete" buttons
@@ -142,6 +167,7 @@ handleNewItemSubmit();
 handleItemCheckClicked();
 handleDeleteItemClicked();
 handleFilterCheck();
+handleShoppingListSearch();
 }
 
 $(handleShoppingList);
