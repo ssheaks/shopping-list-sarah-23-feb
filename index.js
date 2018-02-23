@@ -169,15 +169,19 @@ function handleShoppingListSearch() {
 
 }
 
+function findAndUpdateItem() {
+  //find and filter item.index from <li> using .parent of form? Update item.name
+}
+
 // Listen for when a user edits an item (can build 'cancel button funtionality?).
-// Retrieve the item's name (val) attribute in STORE to set search term.
+// Retrieve the item's index attribute in STORE to update item.
 // Update item name in the STORE.
 // Re-render the shopping list (update render function).
 //stretch goal = add cancel button functionality
 
 function handleEditShoppingList() {
   //listen for submit - have to update HTML in generateItemElement...checkbox? form?
-  $('#js-edit-shopping-item').on('submit', event => {
+  $('.js-shopping-list').on('submit', '#js-edit-shopping-item', event => {
     event.preventDefault();
     const updatedItem = $('.js-edit-shopping-item').val();
     console.log('updatedItem');
