@@ -22,9 +22,21 @@ filter: false,
 search: ''
 }
 function generateItemElement(item, itemIndex, template) {
+  //create html for editing item vs not editing. Cannot edit checked items.
+  let itemName = `<span class="shopping-item js-shopping-item ${item.checked ? "shopping-item__checked" : ''}">${item.name}</span>`;
+  if (!item.checked) {
+    itemName = `
+    <form id="js-edit-shopping-item">
+    <input type="text" name="edit-shopping-item" class="js-edit-shopping-item" value="${item.name}" />
+    <button type="submit">submit edit</button>
+    <button>cancel edit</button>
+    </form>
+    `
+  }
+
   return `
   <li class="js-item-index-element" data-item-index="${itemIndex}">
-      <span class="shopping-item js-shopping-item ${item.checked ? "shopping-item__checked" : ''}">${item.name}</span>
+      ${itemName}
       <div class="shopping-item-controls">
         <button class="shopping-item-toggle js-item-toggle">
             <span class="button-label">check</span>
@@ -157,6 +169,21 @@ function handleShoppingListSearch() {
 
 }
 
+// Listen for when a user edits an item (can build 'cancel button funtionality?).
+// Retrieve the item's name (val) attribute in STORE to set search term.
+// Update item name in the STORE.
+// Re-render the shopping list (update render function).
+//stretch goal = add cancel button functionality
+
+function handleEditShoppingList() {
+  //listen for submit - have to update HTML in generateItemElement...checkbox? form?
+  $('#js-edit-shopping-item').on('submit', event => {
+    event.preventDefault();
+    const updatedItem = $('.js-edit-shopping-item').val();
+    console.log('updatedItem');
+  })
+}
+
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
 // that handle new item submission and user clicks on the "check" and "delete" buttons
@@ -168,6 +195,7 @@ handleItemCheckClicked();
 handleDeleteItemClicked();
 handleFilterCheck();
 handleShoppingListSearch();
+handleEditShoppingList();
 }
 
 $(handleShoppingList);
