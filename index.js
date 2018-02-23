@@ -12,18 +12,18 @@
 // something to see when the page first loads.
 
 const STORE = {
-items: [
-  {name: 'apples', checked: false},
-  {name: 'oranges', checked: false},
-  {name: 'milk', checked: true},
-  {name: 'bread', checked: false}
-],
-filter: false,
-search: ''
-}
+  items: [
+    {name: 'apples', checked: false},
+    {name: 'oranges', checked: false},
+    {name: 'milk', checked: true},
+    {name: 'bread', checked: false}
+  ],
+  filter: false,
+  search: ''
+};
 function generateItemElement(item, itemIndex, template) {
   //create html for editing item vs not editing. Cannot edit checked items.
-  let itemName = `<span class="shopping-item js-shopping-item ${item.checked ? "shopping-item__checked" : ''}">${item.name}</span>`;
+  let itemName = `<span class="shopping-item js-shopping-item ${item.checked ? 'shopping-item__checked' : ''}">${item.name}</span>`;
   if (!item.checked) {
     itemName = `
     <form id="js-edit-shopping-item">
@@ -31,7 +31,7 @@ function generateItemElement(item, itemIndex, template) {
     <button type="submit">submit edit</button>
     <button>cancel edit</button>
     </form>
-    `
+    `;
   }
 
   return `
@@ -98,8 +98,8 @@ function toggleCheckedforListItem(itemIndex) {
 
 function getItemIndexFromElement(item) {
   const itemIndexString = $(item)
-  .closest('.js-item-index-element')
-  .data('item-index');
+    .closest('.js-item-index-element')
+    .data('item-index');
   return itemIndexString;
 }
 
@@ -108,8 +108,8 @@ function handleItemCheckClicked() {
   // this funciton will be reponsible for when users click the "check" button on
   // a shopping list item.
   console.log('`handleItemCheckClicked` ran');
-  $('.js-shopping-list').on('click', `.js-item-toggle`, event => {
-    console.log('`handleItemCheckClicked` ran')
+  $('.js-shopping-list').on('click', '.js-item-toggle', event => {
+    console.log('`handleItemCheckClicked` ran');
     const itemIndex = getItemIndexFromElement(event.currentTarget);
     console.log(itemIndex);
     toggleCheckedforListItem(itemIndex);
@@ -118,18 +118,18 @@ function handleItemCheckClicked() {
 }
 
 function deleteItem(index) {
-STORE.items.splice(index, 1);
+  STORE.items.splice(index, 1);
 }
 
 function handleDeleteItemClicked() {
   // this function will be responsible for when users want to delete a shopping list
   // item
-  console.log('`handleDeleteItemClicked` ran')
+  console.log('`handleDeleteItemClicked` ran');
   $('.js-shopping-list').on('click', '.js-item-delete', event => {
     const itemIndex = getItemIndexFromElement(event.currentTarget);
     deleteItem(itemIndex);
     renderShoppingList();
-  })
+  });
 }
 
 function toggleFilter() {
@@ -150,7 +150,7 @@ function handleFilterCheck() {
 }
 
 function setSearchTerm(term) {
-STORE.search = term;
+  STORE.search = term;
 }
 
 // Listen for when a user enters a search.
@@ -165,12 +165,13 @@ function handleShoppingListSearch() {
     console.log(valSearchTerm);
     setSearchTerm(valSearchTerm);
     renderShoppingList();
-  })
+  });
 
 }
 
-function findAndUpdateItem() {
+function findAndUpdateItem(newName, currentIndex) {
   //find and filter item.index from <li> using .parent of form? Update item.name
+  STORE.items[currentIndex].name = newName;
 }
 
 // Listen for when a user edits an item (can build 'cancel button funtionality?).
@@ -183,9 +184,18 @@ function handleEditShoppingList() {
   //listen for submit - have to update HTML in generateItemElement...checkbox? form?
   $('.js-shopping-list').on('submit', '#js-edit-shopping-item', event => {
     event.preventDefault();
-    const updatedItem = $('.js-edit-shopping-item').val();
-    console.log('updatedItem');
-  })
+    const updatedItem = $(event.currentTarget)
+      .find('.js-edit-shopping-item')
+      .val();
+    console.log(updatedItem);
+    $('.js-edit-shopping-item').val('');
+    const currentIndex = $(event.currentTarget)
+      .parent('.js-item-index-element')
+      .data('item-index');
+    console.log(currentIndex);
+    findAndUpdateItem(updatedItem, currentIndex);
+    renderShoppingList();
+  });
 }
 
 // this function will be our callback when the page loads. it's responsible for
@@ -193,13 +203,13 @@ function handleEditShoppingList() {
 // that handle new item submission and user clicks on the "check" and "delete" buttons
 // for individual shopping list items.
 function handleShoppingList() {
-renderShoppingList();
-handleNewItemSubmit();
-handleItemCheckClicked();
-handleDeleteItemClicked();
-handleFilterCheck();
-handleShoppingListSearch();
-handleEditShoppingList();
+  renderShoppingList();
+  handleNewItemSubmit();
+  handleItemCheckClicked();
+  handleDeleteItemClicked();
+  handleFilterCheck();
+  handleShoppingListSearch();
+  handleEditShoppingList();
 }
 
 $(handleShoppingList);
