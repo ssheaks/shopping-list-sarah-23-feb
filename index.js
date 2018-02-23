@@ -58,7 +58,7 @@ function renderShoppingList() {
 
 function addItemToShoppingList(itemName) {
   console.log(`Adding ${itemName} to shopping list`);
-  STORE.items.push({name: itemName, checked: false});
+  STORE.items.unshift({name: itemName, checked: false});
 }
 
 
