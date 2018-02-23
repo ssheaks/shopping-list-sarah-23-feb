@@ -47,7 +47,11 @@ function renderShoppingList() {
   // this function will be repsonsible for rendering the shopping list in
   // the DOM
   console.log('`renderShoppingList` ran');
-  const shoppingListItemsString = generateShoppingItemsString(STORE.items);
+  let items = STORE.items;
+  if (STORE.filter) {
+    items=STORE.items.filter(item => !item.checked);
+  }
+  const shoppingListItemsString = generateShoppingItemsString(items);
   //inserts HTML into DOM
   $('.js-shopping-list').html(shoppingListItemsString);
 }
@@ -111,6 +115,23 @@ function handleDeleteItemClicked() {
   })
 }
 
+function toggleFilter() {
+  console.log('toggling filter');
+  STORE.filter = !STORE.filter;
+}
+
+// Listen for when a user clicks the filter checkbox.
+// Retrieve the item's filter attribute in STORE.
+// Toggle the filter property in STORE.
+// Re-render the shopping list.
+function handleFilterCheck() {
+  $('.js-filter-checked').click(event => {
+    console.log('handle filter ran');
+    toggleFilter(STORE);
+    renderShoppingList();
+  });
+}
+
 // this function will be our callback when the page loads. it's responsible for
 // initially rendering the shopping list, and activating our individual functions
 // that handle new item submission and user clicks on the "check" and "delete" buttons
@@ -120,6 +141,7 @@ renderShoppingList();
 handleNewItemSubmit();
 handleItemCheckClicked();
 handleDeleteItemClicked();
+handleFilterCheck();
 }
 
 $(handleShoppingList);
